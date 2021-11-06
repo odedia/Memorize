@@ -53,7 +53,17 @@ struct ContentView: View {
     }
     
     func widthThatBestFits(cardCount: Int) -> CGFloat {
-        return 65;
+        if (cardCount == 1) {
+            return 200
+        } else if (cardCount < 5) {
+            return 150
+        } else if (cardCount < 10) {
+            return 100
+        } else if (cardCount < 17) {
+            return 75
+        }
+        return 65
+
     }
     var vehiclesTheme: some View {
         Button(action: {
