@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
    @State var emojis = ["🚂", "🛺", "🚌", "🚀", "🚃", "🛵", "🛻", "⛵️", "⛽️", "✈️", "⛴", "🛳", "🚲", "🏍", "🏎", "🛥", "🛩", "🚁", "🚉", "🚊", "🚈", "🚋", "🚇", "🚒"]
-    @State var emojiCount = 4
+    @State var emojiCount = 15
     
     var body: some View {
         VStack {
@@ -21,7 +21,7 @@ struct ContentView: View {
                 Spacer()
             }
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65 ))]){
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: widthThatBestFits(cardCount: emojiCount) ))]){
                     ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
                         CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
                     }
@@ -30,44 +30,67 @@ struct ContentView: View {
             .padding(.top)
             .foregroundColor(.red)
             Spacer()
-            HStack {
-                vehiclesTheme
-                Spacer()
-                smiliesTheme
-                Spacer()
-                sportsTheme
-//                remove
-//                add
+            VStack {
+                HStack {
+                    vehiclesTheme
+                    Spacer()
+                    smiliesTheme
+                    Spacer()
+                    sportsTheme
+                }
+                HStack {
+                    remove
+                    Spacer()
+                    add
+                }
+                .padding(.top)
+                .font(.largeTitle)
             }
             .padding(.horizontal)
-            .font(.largeTitle)
+            .font(.body)
         }
         .padding(.horizontal)
     }
     
+    func widthThatBestFits(cardCount: Int) -> CGFloat {
+        return 65;
+    }
     var vehiclesTheme: some View {
         Button(action: {
-            emojis = ["🚂", "🛺", "🚌", "🚀", "🚃", "🛵", "🛻", "⛵️", "⛽️", "✈️", "⛴", "🛳", "🚲", "🏍", "🏎", "🛥", "🛩", "🚁", "🚉", "🚊", "🚈", "🚋", "🚇", "🚒"]
+            emojis = ["🚂", "🛺", "🚌", "🚀", "🚃", "🛵", "🛻", "⛵️", "⛽️", "✈️", "⛴", "🛳", "🚲", "🏍", "🏎", "🛥", "🛩", "🚁", "🚉", "🚊", "🚈", "🚋", "🚇", "🚒"].shuffled()
+            emojiCount = Int.random(in: 4..<emojis.count)
         }, label:{
-            Image(systemName: "car.fill")
+            VStack {
+                Text("Vehicles")
+                Image(systemName: "car.fill")
+            }
+            
         })
     }
 
     var smiliesTheme: some View {
         Button(action: {
-            emojis = ["😀","😄","😁","😆","😗","😘","😍","😎","😔","😒","😏","🥺","😡","😳","🤯","☹️","🤩"]
+            emojis = ["😀","😄","😁","😆","😗","😘","😍","😎","😔","😒","😏","🥺","😡","😳","🤯","☹️","🤩"].shuffled()
+            emojiCount = Int.random(in: 4..<emojis.count)
             
         }, label:{
-            Image(systemName: "face.smiling")
+            VStack {
+                Text("Smilies")
+                Image(systemName: "face.smiling")
+            }
         })
     }
 
     var sportsTheme: some View {
         Button(action: {
-            emojis = ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🪁","🥊","⛷"]
+            emojis = ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🪁","🥊","⛷"].shuffled()
+            emojiCount = Int.random(in: 4..<emojis.count)
             
         }, label:{
-            Image(systemName: "sportscourt")
+            VStack {
+                Text("Sports")
+                Image(systemName: "sportscourt")
+            }
         })
     }
 
@@ -80,6 +103,7 @@ struct ContentView: View {
         }, label: {
             Image(systemName: "minus.circle")
         })
+            .disabled(emojiCount == 1)
     }
     
     var add: some View {
@@ -87,10 +111,10 @@ struct ContentView: View {
             if (emojiCount < emojis.count) {
                 emojiCount += 1
             }
-            
         }, label: {
             Image(systemName: "plus.circle")
         })
+            .disabled(emojiCount == emojis.count)
     }
     
 }
